@@ -5,6 +5,7 @@
 /[Aa]ssets/3rd[Pp]arty/**/*.tga
 /[Aa]ssets/3rd[Pp]arty/**/*.cs
 /[Aa]ssets/3rd[Pp]arty/**/*.wav
+/[Aa]ssets/3rd[Pp]arty/**/*.unitypackage
 
 
 # This .gitignore file should be placed at the root of your Unity project directory
