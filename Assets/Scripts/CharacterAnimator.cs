@@ -37,7 +37,7 @@ public class CharacterAnimator : MonoBehaviour
     {
         if (animator == null || !animator.enabled) return;
 
-        animator.SetBool(AnimatorParameters.IsStrafing, charMotor.isStrafing); ;
+        animator.SetBool(AnimatorParameters.IsStrafing, charMotor.isStrafing);
         animator.SetBool(AnimatorParameters.IsSprinting, charMotor.isSprinting);
         animator.SetBool(AnimatorParameters.IsGrounded, charMotor.isGrounded);
         animator.SetFloat(AnimatorParameters.GroundDistance, charMotor.groundDistance);

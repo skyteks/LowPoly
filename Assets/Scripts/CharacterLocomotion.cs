@@ -25,6 +25,12 @@ public class CharacterLocomotion : MonoBehaviour
         public float sprintSpeed = 6f;
     }
 
+    public enum LocomotionType
+    {
+        FreeWithStrafe,
+        OnlyStrafe,
+        OnlyFree,
+    }
 
     [Header("MOVEMENT")]
 
@@ -36,12 +42,7 @@ public class CharacterLocomotion : MonoBehaviour
     public bool useContinuousSprint = true;
     [Tooltip("Check this to sprint always in free movement")]
     public bool sprintOnlyFree = true;
-    public enum LocomotionType
-    {
-        FreeWithStrafe,
-        OnlyStrafe,
-        OnlyFree,
-    }
+
     public LocomotionType locomotionType = LocomotionType.FreeWithStrafe;
 
     public MovementSpeed freeSpeed, strafeSpeed;
@@ -73,12 +74,13 @@ public class CharacterLocomotion : MonoBehaviour
     public float groundMinDistance = 0.25f;
     public float groundMaxDistance = 0.5f;
     [Tooltip("Max angle to walk")]
-    [Range(30, 80)] public float slopeLimit = 75f;
+    [Range(30, 80)]
+    public float slopeLimit = 75f;
 
-                                                  // access the Rigidbody component
-    private PhysicMaterial frictionPhysics, maxFrictionPhysics, slippyPhysics;         // create PhysicMaterial for the Rigidbody
+    // access the Rigidbody component
+    private static PhysicMaterial frictionPhysics, maxFrictionPhysics, slippyPhysics;
     private Rigidbody rigid;
-    private CapsuleCollider capsuleColl;                                          // access CapsuleCollider information
+    private CapsuleCollider capsuleColl;
     private CharacterAnimator charAnim;
 
     // movement bools
@@ -114,26 +116,32 @@ public class CharacterLocomotion : MonoBehaviour
 
     public void Init()
     {
-        // slides the character through walls and edges
-        frictionPhysics = new PhysicMaterial();
-        frictionPhysics.name = "frictionPhysics";
-        frictionPhysics.staticFriction = .25f;
-        frictionPhysics.dynamicFriction = .25f;
-        frictionPhysics.frictionCombine = PhysicMaterialCombine.Multiply;
+        if (frictionPhysics == null)
+        {
+            // slides the character through walls and edges
+            frictionPhysics = new PhysicMaterial("frictionPhysics");
+            frictionPhysics.staticFriction = .25f;
+            frictionPhysics.dynamicFriction = .25f;
+            frictionPhysics.frictionCombine = PhysicMaterialCombine.Multiply;
+        }
 
-        // prevents the collider from slipping on ramps
-        maxFrictionPhysics = new PhysicMaterial();
-        maxFrictionPhysics.name = "maxFrictionPhysics";
-        maxFrictionPhysics.staticFriction = 1f;
-        maxFrictionPhysics.dynamicFriction = 1f;
-        maxFrictionPhysics.frictionCombine = PhysicMaterialCombine.Maximum;
+        if (maxFrictionPhysics == null)
+        {
+            // prevents the collider from slipping on ramps
+            maxFrictionPhysics = new PhysicMaterial("maxFrictionPhysics");
+            maxFrictionPhysics.staticFriction = 1f;
+            maxFrictionPhysics.dynamicFriction = 1f;
+            maxFrictionPhysics.frictionCombine = PhysicMaterialCombine.Maximum;
+        }
 
-        // air physics 
-        slippyPhysics = new PhysicMaterial();
-        slippyPhysics.name = "slippyPhysics";
-        slippyPhysics.staticFriction = 0f;
-        slippyPhysics.dynamicFriction = 0f;
-        slippyPhysics.frictionCombine = PhysicMaterialCombine.Minimum;
+        if (slippyPhysics == null)
+        {
+            // air physics 
+            slippyPhysics = new PhysicMaterial("slippyPhysics");
+            slippyPhysics.staticFriction = 0f;
+            slippyPhysics.dynamicFriction = 0f;
+            slippyPhysics.frictionCombine = PhysicMaterialCombine.Minimum;
+        }
 
         isGrounded = true;
     }
@@ -196,11 +204,10 @@ public class CharacterLocomotion : MonoBehaviour
         }
 
         RaycastHit hitinfo;
-        float hitAngle = 0f;
 
         if (Physics.Linecast(transform.position + Vector3.up * (capsuleColl.height * 0.5f), transform.position + moveDirection.normalized * (capsuleColl.radius + 0.2f), out hitinfo, groundLayer))
         {
-            hitAngle = Vector3.Angle(Vector3.up, hitinfo.normal);
+            float hitAngle = Vector3.Angle(Vector3.up, hitinfo.normal);
 
             var targetPoint = hitinfo.point + moveDirection.normalized * capsuleColl.radius;
             if ((hitAngle > slopeLimit) && Physics.Linecast(transform.position + Vector3.up * (capsuleColl.height * 0.5f), targetPoint, out hitinfo, groundLayer))
@@ -253,7 +260,7 @@ public class CharacterLocomotion : MonoBehaviour
             jumpCounter = 0;
             isJumping = false;
         }
-        // apply extra force to the jump height   
+        // apply extra force to the jump height
         Vector3 velocity = rigid.velocity;
         velocity.y = jumpHeight;
         rigid.velocity = velocity;
@@ -279,7 +286,7 @@ public class CharacterLocomotion : MonoBehaviour
 
         moveDirection = new Vector3(Mathf.Clamp(moveDirection.x, -1f, 1f), 0f, Mathf.Clamp(moveDirection.z, -1f, 1f));
 
-        Vector3 targetPosition = rigid.position + (moveDirection * airSpeed) * Time.deltaTime;
+        Vector3 targetPosition = rigid.position + moveDirection * airSpeed * Time.deltaTime;
         Vector3 targetVelocity = (targetPosition - transform.position) / Time.deltaTime;
 
         targetVelocity.y = rigid.velocity.y;
@@ -332,15 +339,11 @@ public class CharacterLocomotion : MonoBehaviour
     private void ControlMaterialPhysics()
     {
         // change the physics material to very slip when not grounded
-        capsuleColl.material = (isGrounded && GroundAngle() <= slopeLimit + 1) ? frictionPhysics : slippyPhysics;
+        capsuleColl.material = (isGrounded && GroundAngle() <= slopeLimit + 1f) ? frictionPhysics : slippyPhysics;
 
-        if (isGrounded && input == Vector3.zero)
+        if (isGrounded)
         {
-            capsuleColl.material = maxFrictionPhysics;
-        }
-        else if (isGrounded && input != Vector3.zero)
-        {
-            capsuleColl.material = frictionPhysics;
+            capsuleColl.material = input == Vector3.zero ? maxFrictionPhysics : frictionPhysics;
         }
         else
         {
@@ -390,8 +393,6 @@ public class CharacterLocomotion : MonoBehaviour
         float movementAngle = Vector3.Angle(dir, groundHit.normal) - 90f;
         return movementAngle;
     }
-
-    
 
     public void ControlAnimatorRootMotion()
     {
@@ -467,7 +468,7 @@ public class CharacterLocomotion : MonoBehaviour
         {
             //get the right-facing direction of the referenceTransform
             Vector3 right = referenceTransform.right;
-            right.y = 0;
+            right.y = 0f;
             //get the forward direction relative to referenceTransform Right
             Vector3 forward = Quaternion.AngleAxis(-90f, Vector3.up) * right;
             // determine the direction the player will face based on input and the referenceTransform's right and forward directions
@@ -475,13 +476,13 @@ public class CharacterLocomotion : MonoBehaviour
         }
         else
         {
-            moveDirection = new Vector3(inputSmooth.x, 0, inputSmooth.z);
+            moveDirection = new Vector3(inputSmooth.x, 0f, inputSmooth.z);
         }
     }
 
     public void Sprint(bool value)
     {
-        var sprintConditions = input.sqrMagnitude > 0.1f && isGrounded && !(isStrafing && !strafeSpeed.walkByDefault && (horizontalSpeed >= 0.5 || horizontalSpeed <= -0.5 || verticalSpeed <= 0.1f));
+        var sprintConditions = input.sqrMagnitude > 0.1f && isGrounded && !(isStrafing && !strafeSpeed.walkByDefault && (horizontalSpeed >= 0.5f || horizontalSpeed <= -0.5f || verticalSpeed <= 0.1f));
 
         if (value && sprintConditions)
         {

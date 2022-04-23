@@ -36,7 +36,7 @@ public class CharacterControllsInput : MonoBehaviour
 
     void Update()
     {
-        InputHandle();                  // update the input methods
+        InputHandle();                        // update the input methods
         charAnim.UpdateAnimator();            // updates the Animator Parameters
     }
 
@@ -114,18 +114,11 @@ public class CharacterControllsInput : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Conditions to trigger the Jump animation & behavior
-    /// </summary>
-    /// <returns></returns>
     private bool JumpConditions()
     {
         return charMotor.isGrounded && charMotor.GroundAngle() < charMotor.slopeLimit && !charMotor.isJumping && !charMotor.stopMove;
     }
 
-    /// <summary>
-    /// Input to trigger the Jump 
-    /// </summary>
     private void JumpInput()
     {
         if (Input.GetKeyDown(jumpInput) && JumpConditions())
