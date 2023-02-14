@@ -11,7 +11,7 @@ Shader "SyntyStudios/Zombies"
 		_Spec("Spec", Color) = (0,0,0,0)
 		_Smoothness("Smoothness", Range( 0 , 1)) = 0
 		_Emissive("Emissive", 2D) = "white" {}
-		_EmissiveColor("Emissive Color", Color) = (0,0,0,0)
+		[HDR]_EmissiveColor("Emissive Color", Color) = (0,0,0,0)
 		[HideInInspector] _texcoord2( "", 2D ) = "white" {}
 		[HideInInspector] _texcoord( "", 2D ) = "white" {}
 		[HideInInspector] __dirty( "", Int ) = 1
