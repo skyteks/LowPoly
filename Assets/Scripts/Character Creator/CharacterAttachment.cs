@@ -6,4 +6,5 @@ public class CharacterAttachment : MonoBehaviour
 {
     [SerializeField]
     private CharacterAttachmentPoint.AttachmentTypes attachmentType;
+    public CharacterAttachmentPoint.AttachmentTypes Type => attachmentType;
 }

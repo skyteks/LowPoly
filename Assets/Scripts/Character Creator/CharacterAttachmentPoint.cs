@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections;
 using UnityEngine;
 
 public class CharacterAttachmentPoint : MonoBehaviour
@@ -79,6 +80,17 @@ public class CharacterAttachmentPoint : MonoBehaviour
 
     [SerializeField]
     private AttachmentTypes attachmentType;
+    public AttachmentTypes Type => attachmentType;
     [SerializeField]
     private RootBoneNames rootBoneName;
+
+    [SerializeField]
+    private Transform rootBone;
+    public Transform Root => rootBone;
+
+    private void Awake()
+    {
+        Transform rigRoot = transform.root.Find("Root");
+        rootBone = rigRoot.FindDeepChild(rootBoneName.ToString());
+    }
 }
