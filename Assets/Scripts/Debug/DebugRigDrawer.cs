@@ -7,6 +7,7 @@ using UnityEngine;
 #endif
 public class DebugRigDrawer : MonoBehaviour
 {
+    [Range(0.1f, 20f)]
     public float lineThickness = 10f;
     public Color lineColor = Color.red;
 
