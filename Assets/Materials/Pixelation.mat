@@ -85,8 +85,8 @@ Material:
     - _pixelHeight: 6
     - _pixelWidth: 6
     - _pixels: 1920
-    - _pixelsX: 1920
-    - _pixelsY: 1080
+    - _pixelsX: 1327
+    - _pixelsY: 930
     - _pxHeight: 64
     - _pxWidth: 64
     m_Colors:
