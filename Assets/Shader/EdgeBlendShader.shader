@@ -1,14 +1,15 @@
-Shader "Hidden/NormalPassShader"
+Shader "Skyteks/EdgeBlendShader"
 {
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
-
+        _outlineBrightness ("Outline Brighness", Range(0, 1)) = 0.5
     }
     SubShader
     {
         // No culling or depth
         Cull Off ZWrite Off ZTest Always
+        Blend One SrcAlpha
 
         Pass
         {
@@ -23,41 +24,36 @@ Shader "Hidden/NormalPassShader"
             {
                 float4 positionOS : POSITION;
                 float2 uv : TEXCOORD0;
-                float3 normalOS : NORMAL;
             };
 
             struct v2f
             {
                 float2 uv : TEXCOORD0;
                 float4 vertex : SV_POSITION;
-                float3 normalWS : NORMAL;
             };
 
             v2f vert (appdata v)
             {
                 v2f o;
                 VertexPositionInputs vertexInput = GetVertexPositionInputs(v.positionOS.xyz);
-                VertexNormalInputs normalInput = GetVertexNormalInputs(v.normalOS.xyz);
                 o.vertex = vertexInput.positionCS;
-                o.normalWS = normalInput.normalWS;
                 o.uv = v.uv;
                 return o;
             }
 
             sampler2D _MainTex;
-
-            float SampleLinearDepth(float2 uv)
-            {
-                float depth = SampleSceneDepth(uv + 0.25 /_ScreenParams.xy); 
-                return LinearEyeDepth(depth, _ZBufferParams); 
-            }
+            uniform float _outlineBrightness;
 
             float4 frag (v2f i) : SV_Target
             {
-                float4 sample00 = tex2D(_MainTex, i.uv);
-                float depth = i.vertex.z;
+                float4 outlines = tex2D(_MainTex, i.uv);
+
+                float3 brigths = float3(0, 0, 0);
                 
-                return float4(i.normalWS * 0.5 + 0.5, depth);
+                float darks = 1;
+                darks = lerp(darks, _outlineBrightness, outlines.r);
+
+                return float4(brigths, darks);                
             }
             ENDHLSL
         }

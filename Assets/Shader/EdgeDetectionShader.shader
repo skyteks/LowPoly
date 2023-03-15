@@ -1,10 +1,9 @@
-Shader "Hidden/EdgeDetectionShader"
+Shader "Skyteks/EdgeDetectionShader"
 {
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
         _depthThreshold ("Depth Threshold", Range(0, 200)) = 50
-
     }
     SubShader
     {
@@ -54,22 +53,37 @@ Shader "Hidden/EdgeDetectionShader"
             {
                 float2 pixelOffset = float2(1,1) / _ScreenParams.xy;
                 
-                float4 sample00 = tex2D(_MainTex, i.uv);
-                float4 sample10 = tex2D(_MainTex, i.uv - float2(0, pixelOffset.y));
-                float4 sample01 = tex2D(_MainTex, i.uv - float2(pixelOffset.x, 0));
-                float4 sample11 = tex2D(_MainTex, i.uv - pixelOffset);
+                float4 sampleMiddle = tex2D(_MainTex, i.uv);
+                float4 sampleTop = tex2D(_MainTex, i.uv - float2(0, pixelOffset.y));
+                float4 sampleRight = tex2D(_MainTex, i.uv - float2(pixelOffset.x, 0));
+                //float4 sampleTopRight = tex2D(_MainTex, i.uv - pixelOffset);
+                float4 sampleBottom = tex2D(_MainTex, i.uv - float2(0, pixelOffset.y));
+                float4 sampleLeft = tex2D(_MainTex, i.uv - float2(pixelOffset.x, 0));
 
-                sample00.w = SampleLinearDepth(i.uv);
-                sample10.w = SampleLinearDepth(i.uv - float2(0, pixelOffset.y));
-                sample01.w = SampleLinearDepth(i.uv - float2(pixelOffset.x, 0));
-                sample11.w = SampleLinearDepth(i.uv - pixelOffset);
+                sampleMiddle.w = SampleLinearDepth(i.uv);
+                sampleTop.w = SampleLinearDepth(i.uv - float2(0, pixelOffset.y));
+                sampleRight.w = SampleLinearDepth(i.uv - float2(pixelOffset.x, 0));
+                //sampleTopRight.w = SampleLinearDepth(i.uv - pixelOffset);
+                sampleBottom.w = SampleLinearDepth(i.uv - float2(0, -pixelOffset.y));
+                sampleLeft.w = SampleLinearDepth(i.uv - float2(-pixelOffset.x, 0));
 
-                float4 horizontal = abs(sample00 - sample11);
-                float4 vertical = abs(sample10 - sample01);
+                //float4 horizontal = abs(sampleMiddle - sample11);
+                //float4 vertical = abs(sampleTop - sampleRight);
 
-                float4 edge = step(_depthThreshold, max(horizontal, vertical));
+                //float4 edge = step(_depthThreshold, max(horizontal, vertical));
 
-                return edge.w;
+                //return edge.w;
+                
+                float top = sampleMiddle.w - sampleTop.w;
+                float right = sampleMiddle.w - sampleRight.w;
+                float bottom = sampleMiddle.w - sampleBottom.w;
+                float left = sampleMiddle.w - sampleLeft.w;
+
+                float outline = max(max(left, right), max(top, bottom));
+
+                outline = step(_depthThreshold, outline);
+
+                return outline;                
             }
             ENDHLSL
         }

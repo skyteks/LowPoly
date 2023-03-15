@@ -5,12 +5,19 @@ namespace URP
 {
     public class EdgeDetection : ScriptableRendererFeature
     {
-        public Material edgeDetectionMat;
+        [System.Serializable]
+        public struct FeatureParams
+        {
+            public Material edgeDetection;
+            public Material edgeBlend;
+        }
+        
+        public FeatureParams featureParams;
         private EdgeDetectionRenderPass _renderPass;
         
         public override void Create()
         {
-            _renderPass = new EdgeDetectionRenderPass(edgeDetectionMat);
+            _renderPass = new EdgeDetectionRenderPass(featureParams);
             _renderPass.renderPassEvent = RenderPassEvent.BeforeRenderingSkybox;
         }
 
