@@ -6,12 +6,14 @@ namespace URP
 {
     public class EdgeDetectionRenderPass : ScriptableRenderPass
     {
+        private readonly string _name;
         private EdgeDetection.FeatureParams _featureParams;
         private RenderTexture _edgeDetectionTarget;
 
         public EdgeDetectionRenderPass(EdgeDetection.FeatureParams featureParams)
         {
             _featureParams = featureParams;
+            _name = GetType().Name;
         }
 
         public override void Configure(CommandBuffer cmd, RenderTextureDescriptor cameraTextureDescriptor)
@@ -24,12 +26,12 @@ namespace URP
         {
             RenderTargetIdentifier source = renderingData.cameraData.renderer.cameraColorTarget;
 
-            CommandBuffer commandBuffer = CommandBufferPool.Get("EdgeDetection");
+            CommandBuffer commandBuffer = CommandBufferPool.Get(_name);
             commandBuffer.Blit(source, _edgeDetectionTarget, _featureParams.edgeDetection);
             context.ExecuteCommandBuffer(commandBuffer);
             commandBuffer.Clear();
 
-            commandBuffer.Blit(_edgeDetectionTarget, renderingData.cameraData.renderer.cameraColorTarget, _featureParams.edgeBlend);
+            commandBuffer.Blit(_edgeDetectionTarget, renderingData.cameraData.renderer.cameraColorTarget, _featureParams.outlineBlending);
             context.ExecuteCommandBuffer(commandBuffer);
             commandBuffer.Clear();
             CommandBufferPool.Release(commandBuffer);

@@ -9,7 +9,7 @@ namespace URP
         public struct FeatureParams
         {
             public Material edgeDetection;
-            public Material edgeBlend;
+            public Material outlineBlending;
         }
         
         public FeatureParams featureParams;

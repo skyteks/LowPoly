@@ -1,9 +1,9 @@
-Shader "Skyteks/EdgeBlendShader"
+Shader "Skyteks/OutlineBlendingShader"
 {
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
-        _outlineBrightness ("Outline Brighness", Range(0, 1)) = 0.5
+        _OutlineBrightness ("Outline Brighness", Range(0, 1)) = 0.5
     }
     SubShader
     {
@@ -42,7 +42,7 @@ Shader "Skyteks/EdgeBlendShader"
             }
 
             sampler2D _MainTex;
-            uniform float _outlineBrightness;
+            uniform float _OutlineBrightness;
 
             float4 frag (v2f i) : SV_Target
             {
@@ -51,7 +51,7 @@ Shader "Skyteks/EdgeBlendShader"
                 float3 brigths = float3(0, 0, 0);
                 
                 float darks = 1;
-                darks = lerp(darks, _outlineBrightness, outlines.r);
+                darks = lerp(darks, _OutlineBrightness, outlines.r);
 
                 return float4(brigths, darks);                
             }
