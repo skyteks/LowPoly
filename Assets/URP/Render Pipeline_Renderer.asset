@@ -108,4 +108,4 @@ MonoBehaviour:
   m_Active: 1
   featureParams:
     edgeDetection: {fileID: 2100000, guid: 5e438acc72ea7cf4fbc40f8d7fd91a5d, type: 2}
-    edgeBlend: {fileID: 2100000, guid: 84ab0df337ffcb24192078ceb0b1276c, type: 2}
+    outlineBlending: {fileID: 2100000, guid: 84ab0df337ffcb24192078ceb0b1276c, type: 2}
