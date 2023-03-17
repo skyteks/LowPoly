@@ -1,14 +1,29 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-7899974589441268132
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 5
 --- !u!21 &2100000
 Material:
-  serializedVersion: 6
+  serializedVersion: 8
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_Name: DamageZone
-  m_Shader: {fileID: 4800000, guid: d97b2475e12b5c146a78083b2fdbff44, type: 3}
-  m_ShaderKeywords: 
+  m_Shader: {fileID: -6465566751694194690, guid: 2fcfc8033a9efa044bcb377dcb1837d6, type: 3}
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
   m_LightmapFlags: 0
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -62,6 +77,18 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_A3E127FB_Texture_1:
+        m_Texture: {fileID: 2800000, guid: 95853e303d2f5f8458fef0fff2159bb6, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_B845006D_Texture_1:
+        m_Texture: {fileID: 2800000, guid: 95853e303d2f5f8458fef0fff2159bb6, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_F87E20F8_Texture_1:
+        m_Texture: {fileID: 2800000, guid: 95853e303d2f5f8458fef0fff2159bb6, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _TextureSample0:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -74,7 +101,11 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    m_Ints: []
     m_Floats:
+    - Vector1_682B89C5: -0.4
+    - Vector1_B8DC7D9D: 1
+    - Vector1_F0DE848C: 0
     - _ASEOutlineWidth: 0.03
     - _BumpScale: 1
     - _Cutoff: 0.5
@@ -129,6 +160,8 @@ Material:
     - _Zone_Rim: 0.219
     - __dirty: 0
     m_Colors:
+    - Color_14693D33: {r: 0, g: 0.9382715, b: 1, a: 0}
+    - Color_425B13F6: {r: 1, g: 0.93410516, b: 0, a: 0}
     - _ASEOutlineColor: {r: 0, g: 0.2551723, b: 1, a: 0}
     - _Black: {r: 0, g: 0, b: 0, a: 0}
     - _Bottom: {r: 0.50735295, g: 0.8573022, b: 1, a: 0}
@@ -144,3 +177,4 @@ Material:
     - _WaterShallowColor: {r: 0, g: 0, b: 0, a: 0}
     - _White: {r: 1, g: 1, b: 1, a: 0}
     - _Zone_Color: {r: 0, g: 0.5862069, b: 1, a: 1}
+  m_BuildTextureStacks: []

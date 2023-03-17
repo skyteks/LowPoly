@@ -20,6 +20,7 @@ Material:
   stringTagMap:
     RenderType: Transparent
   disabledShaderPasses:
+  - SHADOWCASTER
   - DepthOnly
   m_SavedProperties:
     serializedVersion: 3
@@ -111,12 +112,12 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 0
     m_Colors:
-    - _BaseColor: {r: 0.525519, g: 0.7163167, b: 0.7941176, a: 0.316}
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _BaseColor: {r: 0.52551895, g: 0.7163167, b: 0.7941176, a: 0.316}
+    - _Color: {r: 0.52551895, g: 0.7163167, b: 0.7941176, a: 0.316}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
+    - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
---- !u!114 &5528590084919816449
+--- !u!114 &1514066392053901592
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
