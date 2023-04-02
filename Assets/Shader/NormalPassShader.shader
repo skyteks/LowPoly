@@ -9,6 +9,10 @@ Shader "Skyteks/NormalPassShader"
     {
         Tags {"RenderType" = "Opaque"}
         
+        Cull Back
+        ZWrite On
+        ZTest LEqual
+        
         Pass
         {
             Name "RenderNormals"

@@ -40,12 +40,12 @@ namespace URP
             _edgeDetectionTarget = RenderTexture.GetTemporary(cameraTextureDescriptor.width, cameraTextureDescriptor.height, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.Default);
             _edgeDetectionTarget.filterMode = FilterMode.Point;
             
-            _normalPassTarget = RenderTexture.GetTemporary(cameraTextureDescriptor.width, cameraTextureDescriptor.height, 0, RenderTextureFormat.ARGBFloat, RenderTextureReadWrite.Default);
+            _normalPassTarget = RenderTexture.GetTemporary(cameraTextureDescriptor.width, cameraTextureDescriptor.height, 24, RenderTextureFormat.ARGBFloat, RenderTextureReadWrite.Default);
             _normalPassTarget.filterMode = FilterMode.Point;
             
-            //ConfigureTarget(_normalPassTarget);
+            ConfigureTarget(_normalPassTarget);
             float clearDepth = 1000f;
-            //ConfigureClear(ClearFlag.All, new Color(0.5f, 0.5f, 1f, clearDepth));
+            ConfigureClear(ClearFlag.All, new Color(0.5f, 0.5f, 1f, clearDepth));
         }
 
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
@@ -68,7 +68,7 @@ namespace URP
             CommandBufferPool.Release(normalBuffer);
             
             CommandBuffer commandBuffer = CommandBufferPool.Get("EdgeDetection");
-            commandBuffer.Blit(source, _edgeDetectionTarget, _featureParams.edgeDetection);
+            commandBuffer.Blit(_normalPassTarget, _edgeDetectionTarget, _featureParams.edgeDetection);
             commandBuffer.Blit(_edgeDetectionTarget, renderingData.cameraData.renderer.cameraColorTarget, _featureParams.edgeBlend);
             context.ExecuteCommandBuffer(commandBuffer);
             commandBuffer.Clear();
