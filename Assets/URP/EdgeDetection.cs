@@ -8,8 +8,13 @@ namespace URP
         [System.Serializable]
         public struct FeatureParams
         {
+            public LayerMask layerMask;
+            
+            [Space]
+            
             public Material edgeDetection;
-            public Material outlineBlending;
+            public Material edgeBlend;
+            public Material normalPass;
         }
         
         public FeatureParams featureParams;

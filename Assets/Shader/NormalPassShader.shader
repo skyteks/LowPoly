@@ -1,4 +1,4 @@
-Shader "Hidden/NormalPassShader"
+Shader "Skyteks/NormalPassShader"
 {
     Properties
     {
@@ -7,57 +7,48 @@ Shader "Hidden/NormalPassShader"
     }
     SubShader
     {
-        // No culling or depth
-        Cull Off ZWrite Off ZTest Always
-
+        Tags {"RenderType" = "Opaque"}
+        
         Pass
         {
+            Name "RenderNormals"
+            Tags {"Lightmode" = "RenderNormals"}
+            
             HLSLPROGRAM
             #pragma vertex vert
             #pragma fragment frag
 
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
-            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DeclareDepthTexture.hlsl"
 
             struct appdata
             {
                 float4 positionOS : POSITION;
-                float2 uv : TEXCOORD0;
                 float3 normalOS : NORMAL;
             };
 
             struct v2f
             {
-                float2 uv : TEXCOORD0;
                 float4 vertex : SV_POSITION;
                 float3 normalWS : NORMAL;
+                float3 positionWS : TEXCOORD0;
             };
 
             v2f vert (appdata v)
             {
                 v2f o;
                 VertexPositionInputs vertexInput = GetVertexPositionInputs(v.positionOS.xyz);
-                VertexNormalInputs normalInput = GetVertexNormalInputs(v.normalOS.xyz);
                 o.vertex = vertexInput.positionCS;
-                o.normalWS = normalInput.normalWS;
-                o.uv = v.uv;
+                o.normalWS = mul(UNITY_MATRIX_MV, float4(v.normalOS, 0)).xyz;
+                o.positionWS = vertexInput.positionWS;
                 return o;
-            }
-
-            sampler2D _MainTex;
-
-            float SampleLinearDepth(float2 uv)
-            {
-                float depth = SampleSceneDepth(uv + 0.25 /_ScreenParams.xy); 
-                return LinearEyeDepth(depth, _ZBufferParams); 
             }
 
             float4 frag (v2f i) : SV_Target
             {
-                float4 sample00 = tex2D(_MainTex, i.uv);
-                float depth = i.vertex.z;
+                float depth = length(i.positionWS - _WorldSpaceCameraPos);
+                float3 normal = normalize(i.normalWS) * 0.5 + 0.5;
                 
-                return float4(i.normalWS * 0.5 + 0.5, depth);
+                return float4(normal, depth);
             }
             ENDHLSL
         }

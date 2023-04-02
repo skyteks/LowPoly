@@ -107,5 +107,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Active: 1
   featureParams:
+    layerMask:
+      serializedVersion: 2
+      m_Bits: 2147483647
     edgeDetection: {fileID: 2100000, guid: 5e438acc72ea7cf4fbc40f8d7fd91a5d, type: 2}
-    outlineBlending: {fileID: 2100000, guid: 84ab0df337ffcb24192078ceb0b1276c, type: 2}
+    edgeBlend: {fileID: 2100000, guid: 84ab0df337ffcb24192078ceb0b1276c, type: 2}
+    normalPass: {fileID: 2100000, guid: 5a99673fff66b43409d1953686ea6ee4, type: 2}
